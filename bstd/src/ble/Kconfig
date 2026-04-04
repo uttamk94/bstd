@@ -1,0 +1,7 @@
+menu "Ble Enable menu"
+config BLE_ENABLE
+	bool  "Build source code for Ble enable"
+	default n
+	help
+	  Build source code for ble enable
+endmenu

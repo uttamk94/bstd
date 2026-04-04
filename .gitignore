@@ -1,0 +1,14 @@
+zephyr/
+modules/
+bootloader/
+tools/
+.west/
+.vscode/
+build/
+*.o
+*.elf
+*.bin
+
+__pycache__/
+*.pyc
+.venv/

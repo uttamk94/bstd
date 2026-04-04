@@ -1,0 +1,7 @@
+menu "Common menu"
+config COMMON_ENABLE
+	bool "Build source code for Common"
+	default y
+	help
+	  Build source code for Common
+endmenu

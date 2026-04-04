@@ -1,0 +1,7 @@
+menu "Sensor menu"
+config SENSOR
+	bool "Build source code for Sensor"
+	default n
+	help
+	  Build source code for Sensor
+endmenu

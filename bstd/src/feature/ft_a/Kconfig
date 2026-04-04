@@ -1,0 +1,7 @@
+menu "ft_a menu"
+config FT_A_ENABLE
+	bool  "Build source code for ft_a"
+	default y
+	help
+	  Build source code for ft_a
+endmenu

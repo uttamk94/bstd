@@ -1,0 +1,10 @@
+menu "feature menu"
+rsource "ft_a/Kconfig"
+rsource "ft_b/Kconfig"
+
+config FEATURE_ENABLE
+	bool  "Build source code for feature"
+	default n
+	help
+	  Build source code for feature
+endmenu

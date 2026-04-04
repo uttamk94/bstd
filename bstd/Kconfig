@@ -1,0 +1,17 @@
+source "Kconfig.zephyr"
+
+menu "BSTD menu"
+
+rsource "src/common/Kconfig"
+rsource "src/dev_sett/Kconfig"
+rsource "src/ble/Kconfig"
+rsource "src/shell/Kconfig"
+rsource "src/feature/Kconfig"
+rsource "src/shell/Kconfig"
+
+config BSTD
+	bool  "Build source code for BSTD"
+	default y
+	help
+	  Build source code for BSTD
+endmenu

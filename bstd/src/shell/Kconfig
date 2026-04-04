@@ -1,0 +1,7 @@
+menu "SHELL_MOD menu"
+config SHELL_MOD
+	bool "Build source code for SHELL_MOD"
+	default n
+	help
+	  Build source code for SHELL_MOD
+endmenu

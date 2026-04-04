@@ -1,0 +1,7 @@
+menu "Dev setting menu"
+config DEV_SETT
+	bool  "Build source code for dev setting"
+	default n
+	help
+	  Build source code for dev setting
+endmenu
