@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "sensor.h"
 #include <time.h>
+#include <stdlib.h>
 
 #define SENSOR_TH_STK_SIZE 1024 * 2
 #define MAX_CLNT    0x10
