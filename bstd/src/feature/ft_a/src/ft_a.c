@@ -5,9 +5,9 @@
 #include "shandler.h"
 
 
-void sens_data(sens_type_t type, unsigned int len, void *data) {
+void sens_data(unsigned char type, unsigned int len, void *data) {
     printf("sens_data\n");
-    printf("%s: %d, %u,\n", __func__, type, len);
+    printf("%s: %u, %u,\n", __func__, type, len);
 }
 
 

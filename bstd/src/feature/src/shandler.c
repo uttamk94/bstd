@@ -9,10 +9,9 @@
 sns_handler_t *sns_handlers[MAX_HANDLER];
 
 
-
 void on_sensor_data_received(sens_type_t type, unsigned int len, void *data) {
     printf("%s %d, %u,\n", __func__, type, len);
-    insert_msg_data(type, len, data);
+    insert_msg_data(CMD_SENSOR, type, len, data);
 }
 
 void on_msg_handler(msg_t *msg) {
@@ -66,10 +65,13 @@ int del_all_sensor() {
 }
 
 int init_shandler() {
+    printf("init_shandler\n");
+    memset(sns_handlers, 0, sizeof(sns_handler_t *) * MAX_HANDLER);
     return 0;
 }
 
 int start_shandler() {
+    printf("start_shandler\n");
     reg_msg_handler(CMD_SENSOR, on_msg_handler);
     return 0;
 }

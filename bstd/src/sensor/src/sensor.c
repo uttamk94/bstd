@@ -49,6 +49,7 @@ void generate_data(sens_type_t type) {
     for (int i = 0; i < out.length; i++) {
         out.data[i] = rand() % 256;
     }
+    printf("S: %s: t%d l:%d\n", __func__, out.type, out.length);
     notify_sensor_data(type, &out, sizeof(sensor_out_t));
 }
 
