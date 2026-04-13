@@ -23,17 +23,32 @@ int start_shell() {
     return 0;
 }
 
+typedef struct {
+	int num;
+	unsigned char params[28];
+} param_t;
+
+
+static int parse_args(int argc, char **argv, param_t *params) {
+	log_i("parse_args");
+	params->num = argc - 1;
+	for (int i = 0; i < params->num; i++) {
+		params->params[i] = (unsigned char) atoi(argv[i + 1]);
+	}
+	return argc - 1;
+}
+
 static int cmd_test_start(const struct shell *sh, size_t argc, char **argv) {
-	ARG_UNUSED(argc);
-	ARG_UNUSED(argv);
-	shell_print(sh, "Log test started");
+	param_t params = {0, };
+	parse_args(argc, argv, &params);
+	shell_print(sh, "start: %d, %u %u", params.num, params.params[0], params.params[1]);
 	return 0;
 }
 
 static int cmd_test_stop(const struct shell *sh, size_t argc, char **argv) {
-	ARG_UNUSED(argc);
-	ARG_UNUSED(argv);
-	shell_print(sh, "Log test stopped");
+	param_t params = {0, };
+	parse_args(argc, argv, &params);
+	shell_print(sh, "stop: %d, %u %u", params.num, params.params[0], params.params[1]);
 	return 0;
 }
 
