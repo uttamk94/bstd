@@ -3,6 +3,7 @@
 #include "sensor.h"
 #include <time.h>
 #include <stdlib.h>
+#include "loggers.h"
 
 #define SENSOR_TH_STK_SIZE 1024 * 2
 #define MAX_CLNT    0x10
@@ -49,15 +50,15 @@ void generate_data(sens_type_t type) {
     for (int i = 0; i < out.length; i++) {
         out.data[i] = rand() % 256;
     }
-    printf("S: %s: t%d l:%d\n", __func__, out.type, out.length);
+    log_i("t%d l:%d", out.type, out.length);
     notify_sensor_data(type, &out, sizeof(sensor_out_t));
 }
 
 void sensor_thread_cb(void *arg1, void *arg2, void *arg3) {
-    printf("sensor_thread\n");
+    log_i("sensor_thread");
     int count = 0;
     while (1) {
-        printf("%s: %d\n", __func__, ++count);
+        log_i("%d", ++count);
         count = count % 99999;
         generate_data((sens_type_t) (rand() % SENS_MAX));
         k_msleep(1000);
@@ -68,11 +69,11 @@ K_THREAD_DEFINE(sensor_thread, SENSOR_TH_STK_SIZE, sensor_thread_cb, NULL, NULL,
 
 
 int init_sensor() {
-    printf("init_sensor\n");
+    log_i("init_sensor");
     return 0;
 }
 
 int start_sensor() {
-    printf("start_sensor\n");
+    log_i("start_sensor");
     return 0;
 }

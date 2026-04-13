@@ -3,19 +3,19 @@
 #include "shandler.h"
 #include "sensor.h"
 #include "ft_task.h"
-
+#include "loggers.h"
 #define MAX_HANDLER 0X40
 
 sns_handler_t *sns_handlers[MAX_HANDLER];
 
 
 void on_sensor_data_received(sens_type_t type, unsigned int len, void *data) {
-    printf("%s %d, %u,\n", __func__, type, len);
+    log_i("%d, %u", type, len);
     insert_msg_data(CMD_SENSOR, type, len, data);
 }
 
 void on_msg_handler(msg_t *msg) {
-    printf("%s %d, %u,\n", __func__, msg->type, msg->len);
+    log_i("%d, %u", msg->type, msg->len);
     for (int i = 0; i < MAX_HANDLER; i++) {
         if (sns_handlers[i] && sns_handlers[i]->type == msg->type) {
             sns_handlers[i]->sensor_data_cb(msg->type, msg->len, msg->data);
@@ -35,7 +35,7 @@ int add_sensor(sns_handler_t *handler) {
     if (!found) {
         reg_sensor(handler->type, on_sensor_data_received);
     }
-    printf("%s: f:%d t:%u c: %u\n", __func__, found, handler->type,handler->cid);
+    log_i("f:%d t:%u c: %u",  found, handler->type,handler->cid);
     return found;
 }
 
@@ -51,7 +51,7 @@ int del_sensor(sns_handler_t *handler) {
     if (!found) {
         unreg_sensor(handler->type, on_sensor_data_received);
     }
-    printf("%s: f:%d t:%u c: %u\n", __func__, found, handler->type,handler->cid);
+    log_i("f:%d t:%u c: %u", found, handler->type,handler->cid);
     return found;
 
 }
@@ -65,13 +65,13 @@ int del_all_sensor() {
 }
 
 int init_shandler() {
-    printf("init_shandler\n");
+    log_i("init_shandler");
     memset(sns_handlers, 0, sizeof(sns_handler_t *) * MAX_HANDLER);
     return 0;
 }
 
 int start_shandler() {
-    printf("start_shandler\n");
+    log_i("start_shandler");
     reg_msg_handler(CMD_SENSOR, on_msg_handler);
     return 0;
 }

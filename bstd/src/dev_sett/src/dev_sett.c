@@ -1,7 +1,7 @@
 #include <zephyr/kernel.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "loggers.h"
 #include "dev_sett.h"
 
 #define MAX_LISTNER 0x10
@@ -41,7 +41,7 @@ int set_ds_listner(ds_listner_t *listner) {
 }
 
 void ds_chg_handler(unsigned int len, void *data) {
-    printf("%s: %d\n", __func__, len);
+    log_i("%d", len);
     unsigned char *chg = (unsigned char *) data;
     for (int i = 0; i < MAX_LISTNER; i++) {
         if (listeners[i] && listeners[i]->chg_cb) {
@@ -53,7 +53,7 @@ void ds_chg_handler(unsigned int len, void *data) {
 }
 
 void ds_task_cb(void *p1, void *p2, void *p3) {
-    printf("%s: started\n", __func__);
+    log_i("started");
     ds_msg_t msg;
     while (1) {
         if (!k_msgq_get(&ds_msgq, &msg, K_FOREVER)) {
@@ -73,11 +73,11 @@ void ds_task_cb(void *p1, void *p2, void *p3) {
 K_THREAD_DEFINE(ds_task, 1024, ds_task_cb, NULL, NULL, NULL, 12, 0, 0);
 
 int init_dev_sett() {
-    printf("init_dev_sett\n");
+    log_i("init_dev_sett");
     return 0;
 }
 
 int start_dev_sett() {
-    printf("start_dev_sett\n");
+    log_i("start_dev_sett");
     return 0;
 }

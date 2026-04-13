@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include "common.h"
-
+#include "loggers.h"
 
 int init_common() {
-    printf("init_common\n");
+    log_i("init_common");
     return 0;
 }
 
 int start_common() {
-    printf("start_common\n");
+    log_i("start_common");
     return 0;
 }

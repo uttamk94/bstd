@@ -5,6 +5,7 @@
  */
 #include <zephyr/kernel.h>
 #include <stdio.h>
+#include "loggers.h"
 
 #ifdef CONFIG_DEV_SETT
 #include "dev_sett.h"
@@ -52,7 +53,7 @@ app_init_t look_up[] = {
 };
 
 int main(void) {
-	printf("Hello World! %s\n", CONFIG_BOARD_TARGET);
+	log_i("Hello World! %s", CONFIG_BOARD_TARGET);
 
 	for (int i = 0; i < ARY_SZ(look_up); i++)
 		look_up[i].init_func();
@@ -61,7 +62,7 @@ int main(void) {
 
 	int counter = 0;
 	while (1)  {
-		printf("%s: %d\n", __func__, ++counter);
+		log_i("%d", ++counter);
 		counter = counter % 99999;
 		k_msleep(1000);
 	}

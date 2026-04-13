@@ -9,16 +9,17 @@
 #include <stdlib.h>
 #include <zephyr/drivers/uart.h>
 #include <ctype.h>
+#include "loggers.h"
 
 LOG_MODULE_REGISTER(app);
 
 int init_shell() {
-    printf("init_shell\n");
+    log_i("init_shell");
     return 0;
 }
 
 int start_shell() {
-    printf("start_shell\n");
+    log_i("start_shell");
     return 0;
 }
 

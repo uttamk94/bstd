@@ -5,10 +5,10 @@
 #include "shandler.h"
 #include "ft_a.h"
 #include "ft_b.h"
-
+#include "loggers.h"
 
 int init_feature() {
-    printf("init_feature\n");
+    log_i("init_feature");
     init_ft_task();
     init_shandler();
     init_ft_a();
@@ -17,7 +17,7 @@ int init_feature() {
 }
 
 int start_feature() {
-    printf("start_feature\n");
+    log_i("start_feature");
     start_ft_task();
     start_shandler();
     start_ft_a();

@@ -3,11 +3,11 @@
 
 #include "sensor.h"
 #include "shandler.h"
-
+#include "loggers.h"
 
 void sens_data(unsigned char type, unsigned int len, void *data) {
-    printf("sens_data\n");
-    printf("%s: %u, %u,\n", __func__, type, len);
+    log_i("sens_data");
+    log_i("%u, %u,", type, len);
 }
 
 
@@ -19,13 +19,13 @@ sns_handler_t ft_a_handler = {
 };
 
 int start_ft_a() {
-    printf("start_ft_a\n");
+    log_i("start_ft_a");
     add_sensor(&ft_a_handler);
     return 0;
 }
 
 
 int init_ft_a() {
-    printf("init_ft_a\n");
+    log_i("init_ft_a");
     return 0;
 }
