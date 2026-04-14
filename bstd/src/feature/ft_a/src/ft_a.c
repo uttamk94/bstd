@@ -5,9 +5,14 @@
 #include "shandler.h"
 #include "loggers.h"
 
+#include "ble.h"
+
+unsigned int count = 0;
 void sens_data(unsigned char type, unsigned int len, void *data) {
     log_i("sens_data");
     log_i("%u, %u,", type, len);
+    count++;
+    ble_log((char *)&count, sizeof(count));
 }
 
 

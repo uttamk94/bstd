@@ -5,4 +5,5 @@ zephyr_library_sources(
     src/adv.c
     src/data_svc.c
     src/conn.c
+    src/llog_svc.c
     )

@@ -5,6 +5,7 @@
 
 #include "adv.h"
 #include "loggers.h"
+#include "conn.h"
 
 #define DEVICE_NAME "BSTD_DEV"
 #define DEVICE_NAME_LEN (sizeof(DEVICE_NAME) - 1)
@@ -50,15 +51,22 @@ struct bt_le_adv_param adv_param = {
 
 /* Connection callbacks (optional for extensibility) */
 static void connected(struct bt_conn *conn, uint8_t err) {
+    struct bt_conn *cur_conn = NULL;
     if (err) {
         log_i("BLE conn failed (err %u)", err);
+        cur_conn = NULL;
+
     } else {
         log_i("BLE connected");
+        cur_conn = conn;
     }
+    set_conn(cur_conn);
 }
 
 static void disconnected(struct bt_conn *conn, uint8_t reason) {
     log_i("BLE disconnected (reason %u)", reason);
+    struct bt_conn *cur_conn = NULL;
+    set_conn(cur_conn);
     k_work_submit(&adv_start_work);
 }
 
