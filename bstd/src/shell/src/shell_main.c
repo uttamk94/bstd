@@ -13,6 +13,11 @@
 
 LOG_MODULE_REGISTER(app);
 
+typedef struct {
+	int num;
+	unsigned char params[28];
+} param_t;
+
 int init_shell() {
     log_i("init_shell");
     return 0;
@@ -22,11 +27,6 @@ int start_shell() {
     log_i("start_shell");
     return 0;
 }
-
-typedef struct {
-	int num;
-	unsigned char params[28];
-} param_t;
 
 
 static int parse_args(int argc, char **argv, param_t *params) {
