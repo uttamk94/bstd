@@ -5,6 +5,7 @@
 int init_ble() {
     log_i("init_ble");
     init_adv();
+    init_ble_task();
     init_data_svc();
     init_llog_svc();
     return 0;
@@ -13,6 +14,7 @@ int init_ble() {
 int start_ble() {
     log_i("start_ble");
     start_ble_adv();
+    start_ble_task();
     start_llog_svc();
     return 0;
 }

@@ -101,7 +101,5 @@ int init_adv(void) {
         log_i("BLE init failed (err %d)", err);
         return err;
     }
-
-    log_i("BLE initialized");
     return 0;
 }

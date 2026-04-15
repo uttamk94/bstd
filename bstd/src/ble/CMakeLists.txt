@@ -6,4 +6,5 @@ zephyr_library_sources(
     src/data_svc.c
     src/conn.c
     src/llog_svc.c
+    src/ble_task.c
     )
