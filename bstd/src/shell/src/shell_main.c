@@ -50,12 +50,17 @@ static int cmd_test_stop(const struct shell *sh, size_t argc, char **argv) {
 	shell_print(sh, "stop: %d, %u %u", params.num, params.params[0], params.params[0]);
 	return 0;
 }
+typedef struct {
+	int a;
+	int b;
+	int c;
+} data_t;
 
 #include "nvs_mgr.h"
 static int test_nvs_write(const struct shell *sh, size_t argc, char **argv) {
 	param_t params = {0, };
 	parse_args(argc, argv, &params);
-	shell_print(sh, "write: %d, id:%u len:%u", params.num, params.params[0], params.params[0]);
+	shell_print(sh, "write: id: %d, len:%u", params.params[0], params.params[1]);
 	ssize_t len = nvs_mgr_write(params.params[0], params.params[1], &params.params[2]);
 	shell_print(sh, "len: %d", len);
 	return 0;
@@ -64,9 +69,9 @@ static int test_nvs_write(const struct shell *sh, size_t argc, char **argv) {
 static int test_nvs_read(const struct shell *sh, size_t argc, char **argv) {
 	param_t params = {0, };
 	parse_args(argc, argv, &params);
-	shell_print(sh, "read: %d, id:%u len:%u", params.num, params.params[0], params.params[1]);
-	ssize_t len = nvs_mgr_write(params.params[0], params.params[1], &params.params[2]);
-	shell_print(sh, "rlen: %d data:[0]%d,[1]%d,[2]%d,[3]%d[4]%d", len, params.params[1], params.params[2], params.params[3], params.params[4], params.params[5]);
+	shell_print(sh, "read: id:%u len:%u", params.params[0], params.params[1]);
+	ssize_t len = nvs_mgr_read(params.params[0], params.params[1], &params.params[2]);
+	shell_print(sh, "rlen: %d data:[0]%d,[1]%d,[2]%d,[3]%d[4]%d", len, params.params[2], params.params[3], params.params[4], params.params[5], params.params[6]);
 	return 0;
 }
 
