@@ -6,7 +6,11 @@
 
 #define MSGQ_LENGTH     0x10
 #define BLE_TASK_SIZE   1024 * 2
+
+void ble_task_cb(void *p1, void *p2, void *p3);
+
 K_MSGQ_DEFINE(ble_msgq, sizeof(ble_msg_t), MSGQ_LENGTH, 4);
+K_THREAD_DEFINE(ble_task, BLE_TASK_SIZE, ble_task_cb, NULL, NULL, NULL, 0, 0, 0);
 
 ble_handler ble_handlers[BLE_CMD_MAX];
 
@@ -40,10 +44,6 @@ void ble_task_cb(void *p1, void *p2, void *p3) {
         }
     }
 }
-
-
-K_THREAD_DEFINE(ble_task, BLE_TASK_SIZE, ble_task_cb, NULL, NULL, NULL, 0, 0, 0);
-
 
 int init_ble_task() {
     memset(ble_handlers, 0x00, sizeof(ble_handlers));

@@ -67,7 +67,6 @@ void sensor_thread_cb(void *arg1, void *arg2, void *arg3) {
 
 K_THREAD_DEFINE(sensor_thread, SENSOR_TH_STK_SIZE, sensor_thread_cb, NULL, NULL, NULL, 12, 0, 0);
 
-
 int init_sensor() {
     log_i("init_sensor");
     return 0;

@@ -1,0 +1,7 @@
+menu "Commu Enable menu"
+config COMMU_ENABLE
+	bool  "Build source code for Commu enable"
+	default n
+	help
+	  Build source code for Commu enable
+endmenu

@@ -28,7 +28,6 @@ int start_shell() {
     return 0;
 }
 
-
 static int parse_args(int argc, char **argv, param_t *params) {
 	log_i("parse_args");
 	params->num = argc - 1;
@@ -48,13 +47,39 @@ static int cmd_test_start(const struct shell *sh, size_t argc, char **argv) {
 static int cmd_test_stop(const struct shell *sh, size_t argc, char **argv) {
 	param_t params = {0, };
 	parse_args(argc, argv, &params);
-	shell_print(sh, "stop: %d, %u %u", params.num, params.params[0], params.params[1]);
+	shell_print(sh, "stop: %d, %u %u", params.num, params.params[0], params.params[0]);
 	return 0;
 }
+
+#include "nvs_mgr.h"
+static int test_nvs_write(const struct shell *sh, size_t argc, char **argv) {
+	param_t params = {0, };
+	parse_args(argc, argv, &params);
+	shell_print(sh, "write: %d, id:%u len:%u", params.num, params.params[0], params.params[0]);
+	ssize_t len = nvs_mgr_write(params.params[0], params.params[1], &params.params[2]);
+	shell_print(sh, "len: %d", len);
+	return 0;
+}
+
+static int test_nvs_read(const struct shell *sh, size_t argc, char **argv) {
+	param_t params = {0, };
+	parse_args(argc, argv, &params);
+	shell_print(sh, "read: %d, id:%u len:%u", params.num, params.params[0], params.params[1]);
+	ssize_t len = nvs_mgr_write(params.params[0], params.params[1], &params.params[2]);
+	shell_print(sh, "rlen: %d data:[0]%d,[1]%d,[2]%d,[3]%d[4]%d", len, params.params[1], params.params[2], params.params[3], params.params[4], params.params[5]);
+	return 0;
+}
+
+SHELL_STATIC_SUBCMD_SET_CREATE(nvs_test,
+	SHELL_CMD_ARG(write, NULL, "id len data ", test_nvs_write, 0, 0),
+	SHELL_CMD_ARG(read, NULL, "id len", test_nvs_read, 0, 0),
+	SHELL_SUBCMD_SET_END /* Array terminated. */
+);
 
 SHELL_STATIC_SUBCMD_SET_CREATE(sub_test,
 	SHELL_CMD_ARG(start, NULL, "Start log test", cmd_test_start, 0, 0),
 	SHELL_CMD_ARG(stop, NULL, "Stop log test.", cmd_test_stop, 0, 0),
+	SHELL_CMD_ARG(nvs, &nvs_test, "nvs.", NULL, 0, 0),
 	SHELL_SUBCMD_SET_END /* Array terminated. */
 );
 

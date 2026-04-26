@@ -1,0 +1,7 @@
+menu "NVS Mgr Enable menu"
+config NVS_MGR_ENABLE
+	bool  "Build source code for NVS Mgr enable"
+	default n
+	help
+	  Build source code for NVS Mgr enable
+endmenu

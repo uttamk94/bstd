@@ -2,11 +2,13 @@ source "Kconfig.zephyr"
 
 menu "BSTD menu"
 
+rsource "src/nvs_mgr/Kconfig"
 rsource "src/common/Kconfig"
 rsource "src/dev_sett/Kconfig"
 rsource "src/ble/Kconfig"
 rsource "src/shell/Kconfig"
 rsource "src/feature/Kconfig"
+rsource "src/commu/Kconfig"
 rsource "src/shell/Kconfig"
 
 config BSTD

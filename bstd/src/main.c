@@ -7,6 +7,9 @@
 #include <stdio.h>
 #include "loggers.h"
 
+#ifdef CONFIG_NVS_MGR_ENABLE
+#include "nvs_mgr.h"
+#endif
 #ifdef CONFIG_DEV_SETT
 #include "dev_sett.h"
 #endif
@@ -14,6 +17,11 @@
 #ifdef CONFIG_BLE_ENABLE
 #include "ble.h"
 #endif
+
+#ifdef CONFIG_BLE_ENABLE
+#include "commu.h"
+#endif
+
 #ifdef CONFIG_FEATURE_ENABLE
 #include "feature.h"
 #endif
@@ -35,11 +43,17 @@ typedef struct {
 } app_init_t;
 
 app_init_t look_up[] = {
+#ifdef CONFIG_NVS_MGR_ENABLE
+	LOOKUP(nvs_mgr),
+#endif
 #ifdef CONFIG_SENSOR
 	LOOKUP(sensor),
 #endif
 #ifdef CONFIG_BLE_ENABLE
 	LOOKUP(ble),
+#endif
+#ifdef CONFIG_COMMU_ENABLE
+	LOOKUP(commu),
 #endif
 #ifdef CONFIG_DEV_SETT
 	LOOKUP(dev_sett),
