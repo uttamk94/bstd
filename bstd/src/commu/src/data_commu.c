@@ -2,25 +2,16 @@
 #include "loggers.h"
 #include "ble.h"
 
-typedef enum {
-    MSG_A,
-    MSG_B,
-    MSG_C,
-    MSG_D,
-    MSG_MAX
-} msg_id_t;
+client_handler_t client_table[CLIENT_MAX];
 
-typedef struct {
-    msg_id_t id;
-    void (*msg_handler)(void *buff, unsigned short len);
-} commu_msg_t;
-
-commu_msg_t msg_table[] = {
-    {MSG_A, NULL},
-    {MSG_B, NULL},
-    {MSG_C, NULL},
-    {MSG_D, NULL},
-};
+void set_client_handler(client_id_t client, msg_handler handler) {
+    if (client >= CLIENT_MAX) {
+        log_e("Invalid client id");
+        return;
+    }
+    client_table[client].id = client;
+    client_table[client].handler = handler;
+}
 
 int send_commu_data(void *data, unsigned short len) {
     return notify_value(data, len);
@@ -32,14 +23,14 @@ void on_data_received(unsigned short len, void *data) {
         log_e("data error");
         return;
     }
-    uint8_t *buff = (uint8_t *) data;
-    if (msg_table[*buff].msg_handler) {
-        msg_table[*buff].msg_handler(data, len);
+    uint8_t *client = (uint8_t *) data;
+    if (*client < CLIENT_MAX && client_table[*client].handler) {
+        client_table[*client].handler(data + 1, len - 1);
     }
 }
 
 int init_data_commu() {
-
+    memset(client_table, 0, sizeof(client_table));
 }
 
 int start_data_commu() {

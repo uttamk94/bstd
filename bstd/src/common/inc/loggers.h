@@ -5,7 +5,7 @@
 #define WARN    3
 #define ERROR   4
 
-#define LOG_LEVEL INFO
+#define LOG_LEVEL WARN
 
 #if LOG_LEVEL <= DEBUG
 #define log_d(fmt, ...) printf(" D %s(%d): "fmt"\n", __func__, __LINE__, ##__VA_ARGS__)

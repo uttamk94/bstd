@@ -57,17 +57,17 @@ static inline void ble_log_send(const char *msg) {
     log_i("ble log send %s", msg);
     struct bt_conn *conn = get_conn();
     if (!conn) {
-        log_e("[BLE] no conn");
+        //log_e("[BLE] no conn");
         return;
     }
 
     if (!notify_enabled) {
-        log_e("[BLE] no notify enabled");
+        //log_e("[BLE] no notify enabled");
         return;
     }
 
-    int ret = bt_gatt_notify(conn, log_attr, msg, strlen(msg));
-    log_i("[BLE] notify sent: %d", ret);
+    /* int ret = */ bt_gatt_notify(conn, log_attr, msg, strlen(msg));
+    //log_i("[BLE] notify sent: %d", ret);
 }
 
 void ble_log(const char *msg, int len) {
