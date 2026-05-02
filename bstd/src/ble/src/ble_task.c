@@ -17,6 +17,7 @@ ble_handler ble_handlers[BLE_CMD_MAX];
 int set_ble_handler(ble_cmd_t cmd, ble_handler handler) {
     if (cmd >= BLE_CMD_MAX) return -1;
     ble_handlers[cmd] = handler;
+    log_i("%p", handler);
     return 0;
 }
 
@@ -38,6 +39,7 @@ void ble_task_cb(void *p1, void *p2, void *p3) {
     while (1) {
         if (!k_msgq_get(&ble_msgq, &msg, K_FOREVER)) {
             log_i("cmd %d, len: %d, %u", msg.cmd, msg.len, msg.data[0]);
+            log_i("%p", ble_handlers[msg.cmd]);
             if (msg.cmd < BLE_CMD_MAX && ble_handlers[msg.cmd]) {
                 ble_handlers[msg.cmd](msg.data, msg.len);
             }

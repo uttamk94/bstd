@@ -1,5 +1,7 @@
 #include "capa_msg.h"
 #include "ca_cpa_msg.h"
+#include "loggers.h"
+#include "data_commu.h"
 
 int add_feature_capa(unsigned char *buf) {
     int indx = 0;
@@ -68,13 +70,23 @@ int decode_capa_msg(void *buff, unsigned short len) {
     if (!buff || len < sizeof(mob_capa_msg_t)) {
         return -1;
     }
+    
     msg_header_t *header = (msg_header_t *) buff;
+    log_i("msg_id: %u, type: %u, sz: %u", header->msg_id, header->type, header->sz);
     if (header->type == 0) {
         encode_capa_msg_resp((seq_num_t *) buff + 1);
         decode_capa_msg_req(buff, len);
     } else {
-        decode_capa_msg_resp(buff+1, len-1);
+        decode_capa_msg_resp(((unsigned char *)buff) + 1, len-1);
     }
 
+    return 0;
+}
+
+int init_ca_cpa_msg() {
+    return 0;
+}
+
+int start_ca_cpa_msg() {
     return 0;
 }

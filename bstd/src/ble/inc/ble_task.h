@@ -11,7 +11,6 @@ typedef struct {
     unsigned char data[32];
 } ble_msg_t;
 
-
 typedef void (*ble_handler)(void *data, unsigned short len);
 
 int set_ble_handler(ble_cmd_t cmd, ble_handler handler);

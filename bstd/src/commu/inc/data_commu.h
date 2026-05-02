@@ -8,7 +8,7 @@ typedef enum {
     CLIENT_MAX
 } client_id_t;
 
-typedef void (*msg_handler)(void *buff, unsigned short len);
+typedef void (*msg_handler)(void *buf, unsigned short len);
 
 typedef struct {
     client_id_t id;

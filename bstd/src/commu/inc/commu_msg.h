@@ -9,6 +9,6 @@ typedef enum {
 
 typedef struct {
     msg_id_t msg_id;
-    void (*msg_cb)(void *data, unsigned short len);
+    int (*msg_cb)(void *buf, unsigned short len);
 } commu_msg_t;
 

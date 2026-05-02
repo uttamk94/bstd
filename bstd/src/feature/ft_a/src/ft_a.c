@@ -12,7 +12,7 @@ void sens_data(unsigned char type, unsigned int len, void *data) {
     log_i("sens_data");
     log_i("%u, %u,", type, len);
     count++;
-    ble_log((char *)&count, sizeof(count));
+    //ble_log((char *)&count, sizeof(count));
 }
 
 

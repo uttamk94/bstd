@@ -42,6 +42,14 @@ typedef struct {
 	int (*start_func)(void);
 } app_init_t;
 
+typedef struct {
+	unsigned char cmd;
+	unsigned char len;
+	void *data;
+} mmsg_t;
+
+K_MSGQ_DEFINE(main_msgq, 10, sizeof(mmsg_t), 4);
+
 app_init_t look_up[] = {
 #ifdef CONFIG_NVS_MGR_ENABLE
 	LOOKUP(nvs_mgr),
@@ -66,6 +74,19 @@ app_init_t look_up[] = {
 #endif
 };
 
+int push_mmsg(unsigned char cmd, unsigned char len, void *data) {
+	mmsg_t msg = {
+		.cmd	= cmd,
+		.len 	= len,
+		.data 	= data,
+	};
+	return k_msgq_put(&main_msgq, &msg, K_NO_WAIT);
+}
+
+void handle_mmsg(mmsg_t *msg) {
+	log_i("cmd: %u, len: %u", msg->cmd, msg->len);
+}
+
 int main(void) {
 	log_i("Hello World! %s", CONFIG_BOARD_TARGET);
 
@@ -74,11 +95,11 @@ int main(void) {
 	for (int i = 0; i < ARY_SZ(look_up); i++)
 		look_up[i].start_func();
 
-	int counter = 0;
+	mmsg_t msg = {0, };
 	while (1)  {
-		log_i("%d", ++counter);
-		counter = counter % 99999;
-		k_msleep(1000);
+		if (!k_msgq_get(&main_msgq, &msg, K_FOREVER)) {
+			handle_mmsg(&msg);
+		}
 	}
 	return 0;
 }
