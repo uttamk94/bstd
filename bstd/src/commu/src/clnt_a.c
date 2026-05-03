@@ -4,27 +4,13 @@
 #include "ca_cpa_msg.h"
 #include "loggers.h"
 
-#define ARY_SZ(ary) (sizeof(ary) / sizeof(ary[0]))
 
-commu_msg_t msg_table[] = {
-    {MSG_ID_A, decode_capa_msg},
-    {MSG_ID_B, NULL},
-    {MSG_ID_C, NULL}
+static mmsg_handler_t clnt_a_handler = {
+    .id = CLIENT_A,
+    .cb ={
+        [MSG_CPA] = decode_capa_msg,
+    }
 };
-
-static void on_data_received(void *buf, unsigned short len) {
-    if (!buf || len == 0) {
-       return; 
-    }
-
-    unsigned char msgid = ((unsigned char *)buf)[0];
-    log_i("msg_id: %u", msgid);
-    for (int i = 0; i < ARY_SZ(msg_table); i++) {
-        if (msg_table[i].msg_id == msgid) {
-            msg_table[i].msg_cb(buf, len);
-        }
-    }
-}
 
 int init_clnt_a() {
     init_ca_cpa_msg();
@@ -33,6 +19,6 @@ int init_clnt_a() {
 
 int start_clnt_a() {
     start_ca_cpa_msg();
-    set_client_handler(CLIENT_A, on_data_received);
+    set_client_handler(&clnt_a_handler);
     return 0;
 }

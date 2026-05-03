@@ -82,7 +82,7 @@ static int test_mmsg_cpa(const struct shell *sh, size_t argc, char **argv) {
 	cpa_msg.clint = params.params[0];
 	cpa_msg.msg.header.type = params.params[1]; // request
 	cpa_msg.msg.header.sz = 0; // variable
-	cpa_msg.msg.header.msg_id = 0x00;
+	cpa_msg.msg.header.msg_id = MSG_CPA;
 	insert_ble_msg(BLE_CMD_DATA, sizeof(cpa_msg), &cpa_msg);
 	return 0;
 }

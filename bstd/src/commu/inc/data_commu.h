@@ -1,4 +1,5 @@
 #pragma once
+#include "message.h"
 
 typedef enum {
     CLIENT_A,
@@ -8,14 +9,14 @@ typedef enum {
     CLIENT_MAX
 } client_id_t;
 
-typedef void (*msg_handler)(void *buf, unsigned short len);
+typedef void (*msg_cb)(void *buf, unsigned short len);
 
 typedef struct {
     client_id_t id;
-   msg_handler handler;
-} client_handler_t;
+    msg_cb cb[MSG_MAX];
+} mmsg_handler_t;
 
-void set_client_handler(client_id_t client, msg_handler handler);
+void set_client_handler(mmsg_handler_t *handler);
 int send_commu_data(void *data, unsigned short len);
 
 int init_data_commu();

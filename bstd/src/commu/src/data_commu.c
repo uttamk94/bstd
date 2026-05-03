@@ -2,15 +2,14 @@
 #include "loggers.h"
 #include "ble.h"
 
-client_handler_t client_table[CLIENT_MAX];
+mmsg_handler_t *client_table[CLIENT_MAX];
 
-void set_client_handler(client_id_t client, msg_handler handler) {
-    if (client >= CLIENT_MAX) {
-        log_e("Invalid client id");
+void set_client_handler(mmsg_handler_t *handler) {
+    if (!handler || handler->id >= CLIENT_MAX) {
+        log_e("Invalid handler");
         return;
     }
-    client_table[client].id = client;
-    client_table[client].handler = handler;
+    client_table[handler->id] = handler;
 }
 
 int send_commu_data(void *data, unsigned short len) {
@@ -19,15 +18,21 @@ int send_commu_data(void *data, unsigned short len) {
 
 void on_data_received( void *buf, unsigned short len) {
     log_i("on_data_received");
-    if (!buf || len < 1) {
+    if (!buf || len < 2) {
         log_e("data error");
         return;
     }
     uint8_t *data = (uint8_t *) buf;
     client_id_t client = data[0];
-    log_i("client: %u", client);
-    if (client < CLIENT_MAX && client_table[client].handler) {
-        client_table[client].handler(data + 1, len - 1);
+    message_t msg_type = data[1];
+    if (client >= CLIENT_MAX || msg_type >= MSG_MAX) {
+        log_e("client error");
+        return;
+    }
+
+    mmsg_handler_t *handler = client_table[client];
+    if (handler && handler->cb[msg_type]) {
+        handler->cb[msg_type](buf, len);
     }
 }
 

@@ -1,15 +1,16 @@
 #pragma once
+#include "message.h"
 
 typedef struct {
     unsigned char msg_id:5;     /* message id 0 ~ 31 */
-    unsigned char type:1;       /* 0: request, 1: response */
-    unsigned char sz:1;         /* 0: variable, 1: fixed */
-    unsigned char resv:1;       /* reserved */
+    unsigned char type  :1;       /* 0: request, 1: response */
+    unsigned char sz    :1;         /* 0: variable, 1: fixed */
+    unsigned char resv  :1;       /* reserved */
 } msg_header_t;
 
 typedef struct {
-    unsigned char key;
-    unsigned short value;
+    unsigned char   key;
+    unsigned short  value;
 } seq_num_t;
 
 typedef struct {

@@ -52,9 +52,7 @@ int encode_capa_msg_resp(seq_num_t *seq) {
 }
 
 int decode_mobile_capa_msg(void *buff, unsigned short len) {
-    mob_capa_msg_t *msg = (mob_capa_msg_t *) buff;
-    msg->feat.id;
-    msg->feat.val;
+    //mob_capa_msg_t *msg = (mob_capa_msg_t *) buff;
     return 0;
 }
 
@@ -66,9 +64,9 @@ int decode_capa_msg_resp(void *buff, unsigned short len) {
     return decode_mobile_capa_msg(buff, len);
 }
 
-int decode_capa_msg(void *buff, unsigned short len) {
-    if (!buff || len < sizeof(mob_capa_msg_t)) {
-        return -1;
+void decode_capa_msg(void *buff, unsigned short len) {
+    if (!buff /* || len < sizeof(mob_capa_msg_t) */) {
+        return ;
     }
     
     msg_header_t *header = (msg_header_t *) buff;
@@ -79,8 +77,6 @@ int decode_capa_msg(void *buff, unsigned short len) {
     } else {
         decode_capa_msg_resp(((unsigned char *)buff) + 1, len-1);
     }
-
-    return 0;
 }
 
 int init_ca_cpa_msg() {
