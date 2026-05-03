@@ -4,5 +4,6 @@ zephyr_library_sources(
     src/commu.c
     src/data_commu.c
     src/clnt_a.c
+    src/clnt_b.c
     src/ca_cpa_msg.c
     )

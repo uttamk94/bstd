@@ -1,5 +1,8 @@
+#include <zephyr/kernel.h>
+#include "clnt_b.h"
 #include "capa_msg.h"
 #include "data_commu.h"
+
 
 static mmsg_handler_t clnt_b_handler = {
     .id = CLIENT_B,
