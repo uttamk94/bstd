@@ -40,7 +40,6 @@ void on_data_received( void *buf, unsigned short len) {
     }
 }
 
-
 int init_data_commu() {
     memset(client_table, 0, sizeof(client_table));
     return 0;

@@ -4,7 +4,6 @@
 #include "ca_cpa_msg.h"
 #include "loggers.h"
 
-
 static mmsg_handler_t clnt_a_handler = {
     .id = CLIENT_A,
     .count = 1,
