@@ -6,8 +6,9 @@
 
 static mmsg_handler_t clnt_b_handler = {
     .id = CLIENT_B,
-    .cb ={
-        [MSG_CPA] = NULL,
+    .count = 0,
+    .cbs ={
+        { .id = MSG_CPA, .msg_cb = NULL },
     }
 };
 

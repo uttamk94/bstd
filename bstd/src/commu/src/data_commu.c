@@ -31,10 +31,15 @@ void on_data_received( void *buf, unsigned short len) {
     }
 
     mmsg_handler_t *handler = client_table[client];
-    if (handler && handler->cb[msg_type]) {
-        handler->cb[msg_type](buf, len);
+    for (int i = 0; i < handler->count; i++) {
+        msg_cb_t *cb = &handler->cbs[i];
+        if (cb->id == msg_type) {
+            cb->msg_cb(buf, len);
+            return;
+        }
     }
 }
+
 
 int init_data_commu() {
     memset(client_table, 0, sizeof(client_table));

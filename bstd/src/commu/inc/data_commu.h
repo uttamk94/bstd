@@ -9,11 +9,15 @@ typedef enum {
     CLIENT_MAX
 } client_id_t;
 
-typedef void (*msg_cb)(void *buf, unsigned short len);
+typedef struct {
+    message_t id;
+    void (*msg_cb)(void *buf, unsigned short len);
+} msg_cb_t;
 
 typedef struct {
     client_id_t id;
-    msg_cb cb[MSG_MAX];
+    unsigned char count;
+    msg_cb_t cbs[];
 } mmsg_handler_t;
 
 void set_client_handler(mmsg_handler_t *handler);

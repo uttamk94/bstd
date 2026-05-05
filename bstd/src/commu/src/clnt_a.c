@@ -7,8 +7,9 @@
 
 static mmsg_handler_t clnt_a_handler = {
     .id = CLIENT_A,
-    .cb ={
-        [MSG_CPA] = decode_capa_msg,
+    .count = 1,
+    .cbs ={
+        { .id = MSG_CPA, .msg_cb = decode_capa_msg },
     }
 };
 
