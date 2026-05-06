@@ -2,7 +2,7 @@
 
 typedef enum {
     SENS_TYPE_NONE = 0,
-    SENS_TYPE_SPO2 = 1,
+    SENS_TYPE_S = 1,
     SENS_MAX
 } sens_type_t;
 

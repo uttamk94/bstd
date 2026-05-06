@@ -18,7 +18,7 @@ void sens_data(unsigned char type, unsigned int len, void *data) {
 
 sns_handler_t ft_a_handler = {
     .cid = CID_FA,
-    .type = SENS_TYPE_SPO2,
+    .type = SENS_TYPE_S,
     .sensor_data_cb = sens_data,
     .sensor_status = NULL,
 };
