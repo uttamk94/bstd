@@ -5,14 +5,18 @@
 #include "shandler.h"
 #include "loggers.h"
 
+#if defined(CONFIG_BLE_ENABLE)
 #include "ble.h"
+#endif
 
 unsigned int count = 0;
 void sens_data(unsigned char type, unsigned int len, void *data) {
     log_i("sens_data");
     log_i("%u, %u,", type, len);
     count++;
+#if defined(CONFIG_BLE_ENABLE)
     //ble_log((char *)&count, sizeof(count));
+#endif
 }
 
 

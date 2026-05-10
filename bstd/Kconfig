@@ -9,6 +9,7 @@ rsource "src/ble/Kconfig"
 rsource "src/shell/Kconfig"
 rsource "src/feature/Kconfig"
 rsource "src/commu/Kconfig"
+rsource "src/netwrk/Kconfig"
 rsource "src/shell/Kconfig"
 
 config BSTD

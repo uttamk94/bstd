@@ -1,6 +1,9 @@
 #include "data_commu.h"
 #include "loggers.h"
+
+#if defined(CONFIG_BLE_ENABLE)
 #include "ble.h"
+#endif
 
 mmsg_handler_t *client_table[CLIENT_MAX];
 
@@ -13,16 +16,19 @@ void set_client_handler(mmsg_handler_t *handler) {
 }
 
 int send_commu_data(void *data, unsigned short len) {
+#if defined(CONFIG_BLE_ENABLE)
     return notify_value(data, len);
+#endif 
+    return 0;
 }
 
-void on_data_received( void *buf, unsigned short len) {
+void on_data_received(void *buf, unsigned short len) {
     log_i("on_data_received");
     if (!buf || len < 2) {
         log_e("data error");
         return;
     }
-    uint8_t *data = (uint8_t *) buf;
+    unsigned char *data = (unsigned char *) buf;
     client_id_t client = data[0];
     message_t msg_type = data[1];
     if (client >= CLIENT_MAX || msg_type >= MSG_MAX) {
@@ -46,6 +52,8 @@ int init_data_commu() {
 }
 
 int start_data_commu() {
+#if defined(CONFIG_BLE_ENABLE)
     set_ble_handler(BLE_CMD_DATA, on_data_received);
+#endif
     return 0;
 }

@@ -18,7 +18,7 @@
 #include "ble.h"
 #endif
 
-#ifdef CONFIG_BLE_ENABLE
+#ifdef CONFIG_COMMU_ENABLE
 #include "commu.h"
 #endif
 
@@ -28,6 +28,10 @@
 
 #ifdef CONFIG_SENSOR
 #include "sensor.h"
+#endif
+
+#ifdef CONFIG_NETWORK_MOD
+#include "netwrk.h"
 #endif
 
 #ifdef CONFIG_SHELL_MOD
@@ -69,6 +73,9 @@ app_init_t look_up[] = {
 #ifdef CONFIG_DEV_SETT
 	LOOKUP(feature),
 #endif
+#ifdef CONFIG_NETWORK_MOD
+	LOOKUP(netwrk),
+#endif
 #ifdef CONFIG_SHELL_MOD
 	LOOKUP(shell),
 #endif
@@ -88,7 +95,7 @@ void handle_mmsg(mmsg_t *msg) {
 }
 
 int main(void) {
-	log_i("Hello World! %s", CONFIG_BOARD_TARGET);
+	log_i("BSTD started!!");
 
 	for (int i = 0; i < ARY_SZ(look_up); i++)
 		look_up[i].init_func();

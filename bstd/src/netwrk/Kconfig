@@ -1,0 +1,7 @@
+menu "Netwrok module menu"
+config NETWORK_MOD
+	bool  "Build source code for Netwrok module"
+	default n
+	help
+	  Build source code for Netwrok module
+endmenu

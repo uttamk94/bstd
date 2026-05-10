@@ -12,6 +12,15 @@
 #include "loggers.h"
 #include "nvs_mgr.h"
 
+#include "capa_msg.h"
+#if defined(CONFIG_BLE_ENABLE)
+#include "ble_task.h"
+#endif
+
+#if defined(CONFIG_NETWORK_MOD)
+#include "netwrk.h"
+#endif
+
 LOG_MODULE_REGISTER(app);
 
 typedef struct {
@@ -66,12 +75,13 @@ static int test_nvs_read(const struct shell *sh, size_t argc, char **argv) {
 	parse_args(argc, argv, &params);
 	shell_print(sh, "read: id:%u len:%u", params.params[0], params.params[1]);
 	ssize_t len = nvs_mgr_read(params.params[0], params.params[1], &params.params[2]);
-	shell_print(sh, "rlen: %d data:[0]%d,[1]%d,[2]%d,[3]%d[4]%d", len, params.params[2], params.params[3], params.params[4], params.params[5], params.params[6]);
+	shell_print(sh, "rlen: %d data:[0]%d,[1]%d,[2]%d,[3]%d[4]%d", 
+		len, params.params[2], params.params[3], 
+		params.params[4], params.params[5], 
+		params.params[6]);
 	return 0;
 }
 
-#include "capa_msg.h"
-#include "ble_task.h"
 static int test_mmsg_cpa(const struct shell *sh, size_t argc, char **argv) {
 	param_t params = {0, };
 	parse_args(argc, argv, &params);
@@ -83,7 +93,9 @@ static int test_mmsg_cpa(const struct shell *sh, size_t argc, char **argv) {
 	cpa_msg.msg.header.type = params.params[1]; // request
 	cpa_msg.msg.header.sz = 0; // variable
 	cpa_msg.msg.header.msg_id = MSG_CPA;
+#if defined(CONFIG_BLE_ENABLE)
 	insert_ble_msg(BLE_CMD_DATA, sizeof(cpa_msg), &cpa_msg);
+#endif
 	return 0;
 }
 
@@ -111,6 +123,33 @@ static int test_mmsg_test(const struct shell *sh, size_t argc, char **argv) {
 	return 0;
 }
 
+static int test_ping_test(const struct shell *sh, size_t argc, char **argv) {
+	param_t params = {0, };
+	parse_args(argc, argv, &params);
+#if defined(CONFIG_NETWORK_MOD)
+	push_netwrk_task(NTWRK_CMD_DATA, params.params, params.num);
+#endif
+	return 0;
+}
+
+static int test_connect_test(const struct shell *sh, size_t argc, char **argv) {
+	param_t params = {0, };
+	parse_args(argc, argv, &params);
+#if defined(CONFIG_NETWORK_MOD)
+	push_netwrk_task(NTWRK_CMD_CONNECT, params.params, params.num);
+#endif
+	return 0;
+}
+
+static int test_disconnect_test(const struct shell *sh, size_t argc, char **argv) {
+	param_t params = {0, };
+	parse_args(argc, argv, &params);
+#if defined(CONFIG_NETWORK_MOD)
+	push_netwrk_task(NTWRK_CMD_DISCONNECT, params.params, params.num);
+#endif
+	return 0;
+}
+
 
 SHELL_STATIC_SUBCMD_SET_CREATE(nvs_test,
 	SHELL_CMD_ARG(write, NULL, "id len data ", test_nvs_write, 0, 0),
@@ -127,11 +166,19 @@ SHELL_STATIC_SUBCMD_SET_CREATE(mmsg_test,
 	SHELL_SUBCMD_SET_END /* Array terminated. */
 );
 
+SHELL_STATIC_SUBCMD_SET_CREATE(net_test,
+	SHELL_CMD_ARG(connect, 	NULL, "connect", test_connect_test, 	0, 0),
+	SHELL_CMD_ARG(disconnect, 	NULL, "disconnect", test_disconnect_test, 	0, 0),
+	SHELL_CMD_ARG(ping, 	NULL, "ping", test_ping_test, 	0, 0),
+	SHELL_SUBCMD_SET_END /* Array terminated. */
+);
+
 SHELL_STATIC_SUBCMD_SET_CREATE(sub_test,
 	SHELL_CMD_ARG(start, NULL, "Start log test", cmd_test_start, 0, 0),
 	SHELL_CMD_ARG(stop, NULL, "Stop log test.", cmd_test_stop, 0, 0),
 	SHELL_CMD_ARG(nvs, &nvs_test, "nvs.", NULL, 0, 0),
 	SHELL_CMD_ARG(mmsg, &mmsg_test, "mmgs.", NULL, 0, 0),
+	SHELL_CMD_ARG(net, &net_test, "net", NULL, 0, 0),
 	SHELL_SUBCMD_SET_END /* Array terminated. */
 );
 

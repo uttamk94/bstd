@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include "loggers.h"
 
-#define SENSOR_TH_STK_SIZE 1024 * 2
+#define SENSOR_TH_STK_SIZE 1024 * 4
 #define MAX_CLNT    0x10
 
 typedef struct {
@@ -42,6 +42,7 @@ void notify_sensor_data(sens_type_t type, sensor_out_t *out, unsigned int len) {
         }
     }
 }
+
 void generate_data(sens_type_t type) {
     sensor_out_t out = {0, };
     out.type = type;
@@ -60,7 +61,7 @@ void sensor_thread_cb(void *arg1, void *arg2, void *arg3) {
     while (1) {
         log_i("%d", ++count);
         count = count % 99999;
-        generate_data((sens_type_t) (rand() % SENS_MAX));
+        //generate_data((sens_type_t) (rand() % SENS_MAX));
         k_msleep(1000);
     }
 }
