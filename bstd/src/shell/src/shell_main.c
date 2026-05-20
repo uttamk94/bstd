@@ -135,8 +135,26 @@ static int test_ping_test(const struct shell *sh, size_t argc, char **argv) {
 static int test_connect_test(const struct shell *sh, size_t argc, char **argv) {
 	param_t params = {0, };
 	parse_args(argc, argv, &params);
+
+	unsigned char buf[256] = {0, };
+
+	int indx = 0;
+	buf[indx++] = 0x01;
+	int len = strlen(argv[1]);
+	memcpy(buf + indx, &len, sizeof(len));
+	indx += sizeof(len);
+	memcpy(buf + indx, argv[1], len);
+	indx += len;
+
+	buf[indx++] = 0x02;
+	len = strlen(argv[2]);
+	memcpy(buf + indx, &len, sizeof(len));
+	indx += sizeof(len);
+	memcpy(buf + indx, argv[2], len);
+	indx += len;
+
 #if defined(CONFIG_NETWORK_MOD)
-	push_netwrk_task(NTWRK_CMD_CONNECT, params.params, params.num);
+	push_netwrk_task(NTWRK_CMD_CONNECT, buf, indx);
 #endif
 	return 0;
 }
@@ -144,12 +162,12 @@ static int test_connect_test(const struct shell *sh, size_t argc, char **argv) {
 static int test_disconnect_test(const struct shell *sh, size_t argc, char **argv) {
 	param_t params = {0, };
 	parse_args(argc, argv, &params);
+
 #if defined(CONFIG_NETWORK_MOD)
 	push_netwrk_task(NTWRK_CMD_DISCONNECT, params.params, params.num);
 #endif
 	return 0;
 }
-
 
 SHELL_STATIC_SUBCMD_SET_CREATE(nvs_test,
 	SHELL_CMD_ARG(write, NULL, "id len data ", test_nvs_write, 0, 0),

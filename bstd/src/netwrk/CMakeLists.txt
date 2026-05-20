@@ -5,4 +5,5 @@ zephyr_library_sources(
     src/netwrk_main.c
     src/wifi_http.c
     src/netwrk_task.c
+    src/netw_http_mgr.c
     )

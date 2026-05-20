@@ -1,5 +1,5 @@
 #include "wifi_http.h"
-
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include <zephyr/kernel.h>
@@ -11,86 +11,63 @@
 
 #include "loggers.h"
 
-#define SSID "Disconnet"
-#define PSK "qwerfdsa"
-
 // Semaphores to synchronize connection and IP assignment
 K_SEM_DEFINE(wifi_connected, 0, 1);
-K_SEM_DEFINE(ipv4_address_obtained, 0, 1);
-
 static struct net_mgmt_event_callback mgmt_cb;
-
-static void wifi_mgmt_event_handler(struct net_mgmt_event_callback *cb,
-                                    uint64_t mgmt_event,
-                                    struct net_if *iface)
+static void wifi_mgmt_event_handler(
+    struct net_mgmt_event_callback *cb,
+    uint64_t mgmt_event,
+    struct net_if *iface)
 {
-    if (mgmt_event == NET_EVENT_WIFI_CONNECT_RESULT) {
-        const struct wifi_status *status = (const struct wifi_status *)cb->info;
-        if (status->status == 0) {
-            log_i("Wi-Fi connected successfully");
-            k_sem_give(&wifi_connected);
-        } else {
-            log_i("Wi-Fi connection failed: %d", status->status);
-        }
-    }
-    
-    if (mgmt_event == NET_EVENT_WIFI_DISCONNECT_RESULT) {
-        const struct wifi_status *status = (const struct wifi_status *)cb->info;
-        log_i("Disconnect Reason: %d", status->status);
+    ARG_UNUSED(cb);
+    ARG_UNUSED(iface);
+
+    printk("EVENT: 0x%llx\n", mgmt_event);
+
+    if (mgmt_event & NET_EVENT_L4_CONNECTED) {
+
+        printk("NETWORK READY\n");
+
+        //k_sem_give(&wifi_connected);
     }
 
-    if (mgmt_event == NET_EVENT_IPV4_ADDR_ADD) {
-        log_i("IPv4 address obtained!");
-        k_sem_give(&ipv4_address_obtained);
+    if (mgmt_event & NET_EVENT_L4_DISCONNECTED) {
+
+        printk("NETWORK DOWN\n");
     }
 }
 
-int start_wifi_connection(void)
+int start_wifi_connection(char *ssid, char *psk)
 {
-    struct net_if *iface = net_if_get_default();
-    
-    // 1. Initialize Management Callbacks
-    net_mgmt_init_event_callback(&mgmt_cb, wifi_mgmt_event_handler,
-                                 NET_EVENT_WIFI_CONNECT_RESULT 
-                                | NET_EVENT_IPV4_ADDR_ADD
-                                | NET_EVENT_IPV6_ADDR_ADD
-                                | NET_EVENT_WIFI_DISCONNECT_RESULT);
+    struct net_if *iface = net_if_get_first_wifi();
+    net_if_up(iface);
+
+    net_mgmt_init_event_callback(&mgmt_cb,
+                                wifi_mgmt_event_handler,
+
+                                UINT64_MAX);
     net_mgmt_add_event_callback(&mgmt_cb);
 
-    // 2. Setup Connection Parameters (Short names for Zephyr 3.x+)
     struct wifi_connect_req_params params = {
-        .ssid           = SSID,
-        .ssid_length    = strlen(SSID),
-        .psk            = PSK,
-        .psk_length     = strlen(PSK),
+        .ssid           = ssid,
+        .ssid_length    = strlen(ssid),
+        .psk            = psk,
+        .psk_length     = strlen(psk),
         .channel        = WIFI_CHANNEL_ANY,
         .security       = WIFI_SECURITY_TYPE_PSK,
     };
 
-    log_i("Requesting connection to %s", SSID);
+    log_i("Requesting connection to %s", ssid);
 
-    // 3. Request Connection
     if (net_mgmt(NET_REQUEST_WIFI_CONNECT, iface, &params, sizeof(params))) {
         log_i("Connection request failed to start");
         return -1;
     }
-
-    // 4. Wait for Layers to finish
-    if (k_sem_take(&wifi_connected, K_SECONDS(100)) != 0) {
-        log_i("Wi-Fi connection timed out");
-        return -ETIMEDOUT;
-    }
-
-    if (k_sem_take(&ipv4_address_obtained, K_SECONDS(60)) != 0) {
-        log_i("Failed to obtain IP address (DHCP failure)");
-        return -ETIMEDOUT;
-    }
-
     return 0;
 }
 
-int connect_network(void) {
-    return start_wifi_connection();
+int connect_network(char *ssid, char *psk){
+    return start_wifi_connection(ssid, psk);
 }
 
 int init_wifi_http() {
