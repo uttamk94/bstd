@@ -7,7 +7,7 @@
 #include "netwrk_task.h"
 #include "netw_http_mgr.h"
 
-static char rx_buf[1024];
+static char rx_buf[2048];
 
 int create_http_req(void) {
     netw_http_rsp_t rsp;
@@ -16,7 +16,7 @@ int create_http_req(void) {
         "94.130.142.35",
         80,
         "api.open-meteo.com",
-        "/v1/forecast?latitude=52.52&longitude=13.41&past_days=10&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m",
+        "/v1/forecast?latitude=23.7508961&longitude=90.3842619&hourly=rain&timezone=auto&forecast_days=1",
         rx_buf,
         sizeof(rx_buf),
         &rsp);
