@@ -185,7 +185,7 @@ SHELL_STATIC_SUBCMD_SET_CREATE(mmsg_test,
 );
 
 SHELL_STATIC_SUBCMD_SET_CREATE(net_test,
-	SHELL_CMD_ARG(connect, 	NULL, "connect", test_connect_test, 	0, 0),
+	SHELL_CMD_ARG(connect, 	NULL, "connect Name Pass", test_connect_test, 	0, 0),
 	SHELL_CMD_ARG(disconnect, 	NULL, "disconnect", test_disconnect_test, 	0, 0),
 	SHELL_CMD_ARG(ping, 	NULL, "ping", test_ping_test, 	0, 0),
 	SHELL_SUBCMD_SET_END /* Array terminated. */

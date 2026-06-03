@@ -2,10 +2,12 @@
 #include "netwrk_task.h"
 #include "loggers.h"
 
+#define MSG_LENGTH 64
+
 typedef struct {
     unsigned char cmd;
     unsigned char len;
-    unsigned char data[28];
+    unsigned char data[MSG_LENGTH];
 } netwrk_msg_t;
 
 K_MSGQ_DEFINE(netwrk_msgq, sizeof(netwrk_msg_t), 16, 4);
@@ -18,7 +20,7 @@ int set_netwrk_listner(ntwrk_msg_listner_t *listner) {
 }
 
 int push_netwrk_task(unsigned char cmd, unsigned char *data, unsigned char len) {
-    if (len > 28) {
+    if (len > MSG_LENGTH) {
         return -EINVAL;
     }
     netwrk_msg_t msg = {0};
