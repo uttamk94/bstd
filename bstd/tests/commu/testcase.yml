@@ -1,0 +1,6 @@
+tests:
+  bstd.commu.basic:
+    platform_allow:
+      - native_sim
+    tags:
+      - commu

@@ -38,26 +38,25 @@ void on_ntwrk_connect(void *data, unsigned char len) {
     char psk[32] = {0, };
     int indx = 0;
     while (indx < len) {
-        switch (buf[indx++])
-        {
-        case 0x01:{
-            int len = 0;
-            memcpy(&len, buf + indx, sizeof(len));
-            indx += sizeof(len);
-            memcpy(ssid, buf + indx, len);
-            indx += len;
-        } break;
-        
-        case 0x02:{
-            int len = 0;
-            memcpy(&len, buf + indx, sizeof(len));
-            indx += sizeof(len);
-            memcpy(psk, buf + indx, len);
-            indx += len;
-        } break;
+        switch (buf[indx++]) {
+            case 0x01:{
+                int len = 0;
+                memcpy(&len, buf + indx, sizeof(len));
+                indx += sizeof(len);
+                memcpy(ssid, buf + indx, len);
+                indx += len;
+            } break;
+            
+            case 0x02:{
+                int len = 0;
+                memcpy(&len, buf + indx, sizeof(len));
+                indx += sizeof(len);
+                memcpy(psk, buf + indx, len);
+                indx += len;
+            } break;
 
-        default:
-            break;
+            default:
+                break;
         }
     }
     connect_network(ssid, psk);
