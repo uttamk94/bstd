@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include "loggers.h"
 
-#define SENSOR_TH_STK_SIZE 1024 * 4
+#define SENSOR_TH_STK_SIZE 1024 * 8
 #define MAX_CLNT    0x10
 
 typedef struct {
@@ -46,12 +46,12 @@ void notify_sensor_data(sens_type_t type, sensor_out_t *out, unsigned int len) {
 void generate_data(sens_type_t type) {
     sensor_out_t out = {0, };
     out.type = type;
-    out.length = rand() % 512;
+    out.length = 5 + 25;
     out.timestamp = time(NULL);
-    for (int i = 0; i < out.length; i++) {
-        out.data[i] = rand() % 256;
+    for (int i = 0; i < out.length && i < 32; i++) {
+        out.data[i] = i * 5;
     }
-    log_i("t%d l:%d", out.type, out.length);
+    log_i("t:%u l:%u", out.type, out.length);
     notify_sensor_data(type, &out, sizeof(sensor_out_t));
 }
 
@@ -61,8 +61,8 @@ void sensor_thread_cb(void *arg1, void *arg2, void *arg3) {
     while (1) {
         log_i("%d", ++count);
         count = count % 99999;
-        //generate_data((sens_type_t) (rand() % SENS_MAX));
-        k_msleep(1000);
+        generate_data(1);
+        k_msleep(2000);
     }
 }
 
@@ -70,6 +70,7 @@ K_THREAD_DEFINE(sensor_thread, SENSOR_TH_STK_SIZE, sensor_thread_cb, NULL, NULL,
 
 int init_sensor() {
     log_i("init_sensor");
+    memset(table, 0, sizeof(table));
     return 0;
 }
 

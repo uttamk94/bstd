@@ -4,4 +4,10 @@ config FT_A_ENABLE
 	default y
 	help
 	  Build source code for ft_a
+
+config ENCODER_ENABLE
+	bool  "Build source code for ft_a"
+	default n
+	help
+	  Build source code for ENDOCDER
 endmenu

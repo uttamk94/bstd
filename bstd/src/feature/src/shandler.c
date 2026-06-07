@@ -9,7 +9,8 @@
 sns_handler_t *sns_handlers[MAX_HANDLER];
 
 
-void on_sensor_data_received(sens_type_t type, unsigned int len, void *data) {
+
+static void on_sensor_data_received(sens_type_t type, unsigned int len, void *data) {
     log_i("%d, %u", type, len);
     insert_msg_data(CMD_SENSOR, type, len, data);
 }

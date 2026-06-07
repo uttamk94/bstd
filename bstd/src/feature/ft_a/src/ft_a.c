@@ -9,21 +9,29 @@
 #include "ble.h"
 #endif
 
+#if defined(CONFIG_ENCODER_ENABLE)
+#include "my_encoder.h"
+#endif
+
 unsigned int count = 0;
-void sens_data(unsigned char type, unsigned int len, void *data) {
+void on_sens_data_received(unsigned char type, unsigned int len, void *data) {
     log_i("sens_data");
     log_i("%u, %u,", type, len);
+
+#if defined(CONFIG_ENCODER_ENABLE)
+    log_w("%d", encode(2, 4));
+#endif
+
     count++;
 #if defined(CONFIG_BLE_ENABLE)
     //ble_log((char *)&count, sizeof(count));
 #endif
 }
 
-
 sns_handler_t ft_a_handler = {
     .cid = CID_FA,
     .type = SENS_TYPE_S,
-    .sensor_data_cb = sens_data,
+    .sensor_data_cb = on_sens_data_received,
     .sensor_status = NULL,
 };
 

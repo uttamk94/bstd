@@ -30,7 +30,8 @@ int insert_msg_data(cmd_t cmd, unsigned type, unsigned int len, unsigned char *d
     msg.cmd = cmd;
     msg.type = type;
     msg.len = len;
-    msg.data = data;
+    msg.data = (unsigned char *)k_malloc(len);
+    memcpy(msg.data, data, len);
     int ret = k_msgq_put(&msg_q, &msg, K_NO_WAIT);
     log_i("%d", ret);
     return ret;
@@ -47,6 +48,8 @@ void ft_task_cb(void *p1, void *p2, void *p3) {
                     handlers[msg.cmd][i](&msg);
                 }
             }
+            k_free(msg.data);
+            msg.data = NULL;
         }
     }
 }
@@ -61,4 +64,4 @@ int start_ft_task() {
     return 0;
 }
 
-K_THREAD_DEFINE(ft_task, 1024, ft_task_cb, NULL, NULL, NULL, 12, 0, 0);
+K_THREAD_DEFINE(ft_task, 1024 * 6, ft_task_cb, NULL, NULL, NULL, 12, 0, 0);
