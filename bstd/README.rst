@@ -31,3 +31,11 @@ Sample Output
     Hello World! x86
 
 Exit QEMU by pressing :kbd:`CTRL+A` :kbd:`x`.
+
+
+build command 
+uttam@uttam:~/zephyrproject$ source ~/zephyr-env/bin/activate
+(zephyr-env) uttam@uttam:~/zephyrproject$ west build -p always -b esp32s3_devkitc/esp32s3/procpu bstd
+(zephyr-env) uttam@uttam:~/zephyrproject$ west flash
+(zephyr-env) uttam@uttam:~/zephyrproject$ west espressif monitor
+

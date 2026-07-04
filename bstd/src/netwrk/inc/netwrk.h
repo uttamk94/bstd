@@ -4,5 +4,6 @@
 #include "netwrk_main.h"
 #include "netwrk_task.h"
 
-int init_netwrk();
-int start_netwrk();
+int init_netwrk(void);
+int start_netwrk(void);
+int stop_netwrk(void);

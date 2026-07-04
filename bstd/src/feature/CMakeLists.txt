@@ -8,3 +8,4 @@ zephyr_library_sources(src/shandler.c)
 
 add_subdirectory_ifdef(CONFIG_FT_A_ENABLE ft_a)
 add_subdirectory_ifdef(CONFIG_FT_A_ENABLE ft_b)
+add_subdirectory_ifdef(CONFIG_LCR_ENABLE lcr)

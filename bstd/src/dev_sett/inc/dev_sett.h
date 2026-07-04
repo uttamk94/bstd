@@ -29,5 +29,6 @@ ds_data_t get_ds_data();
 
 int set_ds_listner(ds_listner_t *listner);
 
-int init_dev_sett();
-int start_dev_sett();
+int init_dev_sett(void);
+int start_dev_sett(void);
+int stop_dev_sett(void);

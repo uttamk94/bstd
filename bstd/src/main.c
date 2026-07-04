@@ -44,6 +44,7 @@
 typedef struct {
 	int (*init_func)(void);
 	int (*start_func)(void);
+	int (*stop_func)(void);
 } app_init_t;
 
 typedef struct {
@@ -56,28 +57,28 @@ K_MSGQ_DEFINE(main_msgq, 10, sizeof(mmsg_t), 4);
 
 app_init_t look_up[] = {
 #ifdef CONFIG_NVS_MGR_ENABLE
-	LOOKUP(nvs_mgr),
+	{ .init_func = init_nvs_mgr, .start_func = start_nvs_mgr, .stop_func = stop_nvs_mgr },
 #endif
 #ifdef CONFIG_SENSOR
-	LOOKUP(sensor),
+	{ .init_func = init_sensor, .start_func = start_sensor, .stop_func = stop_sensor },
 #endif
 #ifdef CONFIG_BLE_ENABLE
-	LOOKUP(ble),
+	{ .init_func = init_ble, .start_func = start_ble, .stop_func = stop_ble },
 #endif
 #ifdef CONFIG_COMMU_ENABLE
-	LOOKUP(commu),
+	{ .init_func = init_commu, .start_func = start_commu, .stop_func = stop_commu },
 #endif
 #ifdef CONFIG_DEV_SETT
-	LOOKUP(dev_sett),
+	{ .init_func = init_dev_sett, .start_func = start_dev_sett, .stop_func = stop_dev_sett },
 #endif
-#ifdef CONFIG_DEV_SETT
-	LOOKUP(feature),
+#ifdef CONFIG_FEATURE_ENABLE
+	{ .init_func = init_feature, .start_func = start_feature, .stop_func = stop_feature },
 #endif
 #ifdef CONFIG_NETWORK_MOD
-	LOOKUP(netwrk),
+	{ .init_func = init_netwrk, .start_func = start_netwrk, .stop_func = stop_netwrk },
 #endif
 #ifdef CONFIG_SHELL_MOD
-	LOOKUP(shell),
+	{ .init_func = init_shell, .start_func = start_shell, .stop_func = stop_shell },
 #endif
 };
 
@@ -97,10 +98,13 @@ void handle_mmsg(mmsg_t *msg) {
 int main(void) {
 	log_i("BSTD started!!");
 
-	for (int i = 0; i < ARY_SZ(look_up); i++)
+	for (int i = 0; i < ARY_SZ(look_up); i++) {
 		look_up[i].init_func();
-	for (int i = 0; i < ARY_SZ(look_up); i++)
+	}
+
+	for (int i = 0; i < ARY_SZ(look_up); i++) {
 		look_up[i].start_func();
+	}
 
 	mmsg_t msg = {0, };
 	while (1)  {
@@ -108,5 +112,12 @@ int main(void) {
 			handle_mmsg(&msg);
 		}
 	}
+
+	/* Graceful shutdown (never reached in current design) */
+	log_i("Shutting down modules...");
+	for (int i = ARY_SZ(look_up); i > 0; i--) {
+		look_up[i - 1].stop_func();
+	}
+
 	return 0;
-}
+	}

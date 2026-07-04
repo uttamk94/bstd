@@ -25,3 +25,4 @@ int insert_sensor_data(sens_type_t type, unsigned int len, void *data);
 
 int init_sensor();
 int start_sensor();
+int stop_sensor();

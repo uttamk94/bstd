@@ -55,3 +55,7 @@ int init_ble_task() {
 int start_ble_task() {
     return 0;
 }
+
+int stop_ble_task() {
+    return 0;
+}

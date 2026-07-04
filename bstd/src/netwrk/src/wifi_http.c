@@ -77,3 +77,7 @@ int init_wifi_http() {
 int start_wifi_http() {
     return 0;
 }
+
+int stop_wifi_http() {
+    return 0;
+}

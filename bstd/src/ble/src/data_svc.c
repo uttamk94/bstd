@@ -84,3 +84,7 @@ int init_data_svc(void) {
 int start_data_svc(void) {
     return 0;
 }
+
+int stop_data_svc(void) {
+    return 0;
+}

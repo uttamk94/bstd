@@ -18,5 +18,6 @@ int del_sensor(sns_handler_t *handler);
 int add_all_sensor();
 int del_all_sensor();
 
-int init_shandler();
-int start_shandler();
+int init_shandler(void);
+int start_shandler(void);
+int stop_shandler(void);

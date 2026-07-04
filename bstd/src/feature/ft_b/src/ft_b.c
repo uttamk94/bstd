@@ -2,12 +2,17 @@
 #include "ft_b.h"
 #include "loggers.h"
 
-int start_ft_b() {
-    log_i("start_ft_b");
+int init_ft_b(void) {
+    log_i("Init B");
     return 0;
 }
 
-int init_ft_b() {
-    log_i("init_ft_b");
+int start_ft_b(void) {
+    log_i("Start B");
+    return 0;
+}
+
+int stop_ft_b(void) {
+    log_i("Stop B");
     return 0;
 }

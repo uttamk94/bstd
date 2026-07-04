@@ -1,6 +1,6 @@
 
 #include "nvs_mgr.h"
-
+#include "loggers.h"
 
 #include <zephyr/storage/flash_map.h>
 #include <zephyr/kvss/nvs.h>
@@ -27,8 +27,22 @@ ssize_t nvs_mgr_read(unsigned short id, unsigned short len, void *data) {
  }
 
 int init_nvs_mgr(void) { 
-    nvs_init();
+    log_i("Initializing NVS manager");
+    int ret = nvs_init();
+    if (ret != 0) {
+        log_e("NVS mount failed: %d", ret);
+        return ret;
+    }
     return 0;
 }
 
-int start_nvs_mgr(void) { return 0; }
+int start_nvs_mgr(void) { 
+    log_i("NVS manager started");
+    return 0; 
+}
+
+int stop_nvs_mgr(void) {
+    log_i("Stopping NVS manager");
+    /* Note: NVS unmount not available in current Zephyr version */
+    return 0;
+}

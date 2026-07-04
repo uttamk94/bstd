@@ -6,5 +6,6 @@
 #include "llog_svc.h"
 #include "ble_task.h"
 
-int init_ble();
-int start_ble();
+int init_ble(void);
+int start_ble(void);
+int stop_ble(void);

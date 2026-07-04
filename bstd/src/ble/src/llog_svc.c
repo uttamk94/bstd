@@ -88,3 +88,7 @@ int start_llog_svc(void) {
     init_attr();
     return 0;
 }
+
+int stop_llog_svc(void) {
+    return 0;
+}

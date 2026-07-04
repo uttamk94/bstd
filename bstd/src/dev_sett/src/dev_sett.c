@@ -41,8 +41,12 @@ int set_ds_listner(ds_listner_t *listner) {
 }
 
 void ds_chg_handler(unsigned int len, void *data) {
-    log_i("%d", len);
-    unsigned char *chg = (unsigned char *) data;
+    if (!data || len == 0) {
+        log_e("Invalid");
+        return;
+    }
+    log_i("len=%d", len);
+    unsigned char *chg = (unsigned char *)data;
     for (int i = 0; i < MAX_LISTNER; i++) {
         if (listeners[i] && listeners[i]->chg_cb) {
             listeners[i]->chg_cb(*chg);
@@ -72,12 +76,22 @@ void ds_task_cb(void *p1, void *p2, void *p3) {
 
 K_THREAD_DEFINE(ds_task, 1024, ds_task_cb, NULL, NULL, NULL, 12, 0, 0);
 
-int init_dev_sett() {
-    log_i("init_dev_sett");
+int init_dev_sett(void) {
+    log_i("Init ds");
+    memset(listeners, 0, sizeof(listeners));
+    memset(&ds_data, 0, sizeof(ds_data));
     return 0;
 }
 
-int start_dev_sett() {
-    log_i("start_dev_sett");
+int start_dev_sett(void) {
+    log_i("Starting ds");
+    return 0;
+}
+
+int stop_dev_sett(void) {
+    log_i("Stopping ds");
+    memset(listeners, 0, sizeof(listeners));
+    memset(&ds_data, 0, sizeof(ds_data));
+
     return 0;
 }

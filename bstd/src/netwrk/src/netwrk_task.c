@@ -58,3 +58,6 @@ int init_netwrk_task(void) {
     return 0;
 }
 
+int stop_netwrk_task(void) {
+    return 0;
+}

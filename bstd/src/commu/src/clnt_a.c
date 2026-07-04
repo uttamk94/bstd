@@ -12,13 +12,21 @@ static mmsg_handler_t clnt_a_handler = {
     }
 };
 
-int init_clnt_a() {
+int init_clnt_a(void) {
+    log_i("Initializing client A");
     init_ca_cpa_msg();
     return 0;
 }
 
-int start_clnt_a() {
+int start_clnt_a(void) {
+    log_i("Starting client A");
     start_ca_cpa_msg();
     set_client_handler(&clnt_a_handler);
+    return 0;
+}
+
+int stop_clnt_a(void) {
+    log_i("Stopping client A");
+    set_client_handler(NULL);
     return 0;
 }

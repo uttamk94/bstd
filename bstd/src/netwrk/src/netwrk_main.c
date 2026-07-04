@@ -92,3 +92,8 @@ int start_netwrk_main() {
     set_netwrk_listner(&lstnr);
     return 0;
 }
+
+int stop_netwrk_main() {
+    log_i("begin");
+    return 0;
+}

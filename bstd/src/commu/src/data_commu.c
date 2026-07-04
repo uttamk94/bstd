@@ -57,3 +57,7 @@ int start_data_commu() {
 #endif
     return 0;
 }
+
+int stop_data_commu() {
+    return 0;
+}

@@ -5,5 +5,6 @@
 #include "clnt_b.h"
 #include "ca_cpa_msg.h"
 
-int init_commu();
-int start_commu();
+int init_commu(void);
+int start_commu(void);
+int stop_commu(void);

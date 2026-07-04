@@ -18,3 +18,4 @@ int insert_ble_msg(ble_cmd_t cmd, unsigned short len, const void *data);
 
 int init_ble_task();
 int start_ble_task();
+int stop_ble_task();

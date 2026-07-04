@@ -16,8 +16,17 @@ typedef struct {
 sens_table_t table[SENS_MAX];
 
 int reg_sensor(sens_type_t type, sensor_data_cb handler) {
+    if (type >= SENS_MAX || !handler) {
+        log_e("Inv type=%d, handler=%p", type, handler);
+        return -EINVAL;
+    }
+    if (table[type].index >= MAX_CLNT) {
+        log_e("No slots for sensor type %d", type);
+        return -ENOSPC;
+    }
     table[type].handler[table[type].index++] = handler;
     table[type].index = table[type].index % MAX_CLNT;
+    log_i(" sensor %d", type);
     return 0;
 }
 
@@ -32,6 +41,11 @@ int unreg_sensor(sens_type_t type, sensor_data_cb handler) {
 }
 
 int insert_sensor_data(sens_type_t type, unsigned int len, void *data) {
+    if (type >= SENS_MAX || !data || len == 0) {
+        log_e("Invalid sensor data: type=%d, len=%d", type, len);
+        return -EINVAL;
+    }
+    log_d("type=%d, len=%d", type, len);
     return 0;
 }
 
@@ -69,12 +83,17 @@ void sensor_thread_cb(void *arg1, void *arg2, void *arg3) {
 K_THREAD_DEFINE(sensor_thread, SENSOR_TH_STK_SIZE, sensor_thread_cb, NULL, NULL, NULL, 12, 0, 0);
 
 int init_sensor() {
-    log_i("init_sensor");
+    log_i("Init");
     memset(table, 0, sizeof(table));
     return 0;
 }
 
 int start_sensor() {
-    log_i("start_sensor");
+    log_i("Start");
+    return 0;
+}
+
+int stop_sensor(void) {
+    log_i("Stop");
     return 0;
 }

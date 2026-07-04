@@ -28,13 +28,18 @@ typedef struct {
 	unsigned char params[28];
 } param_t;
 
-int init_shell() {
-    log_i("init_shell");
+int init_shell(void) {
+    log_i("Init");
     return 0;
 }
 
-int start_shell() {
-    log_i("start_shell");
+int start_shell(void) {
+    log_i("Start");
+    return 0;
+}
+
+int stop_shell(void) {
+    log_i("Stop");
     return 0;
 }
 

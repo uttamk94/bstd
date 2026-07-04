@@ -3,7 +3,7 @@
 #include "capa_msg.h"
 #include "data_commu.h"
 #include "cb_cpa_msg.h"
-
+#include "loggers.h"
 
 static void decode_req_msg(void *buf, unsigned short len) {
     //req_msg_t *msg = (req_msg_t *) buf;
@@ -24,13 +24,21 @@ static mmsg_handler_t clnt_b_handler = {
     }
 };
 
-int init_clnt_b() {
-    //init_cb_cpa_msg();
+int init_clnt_b(void) {
+    log_i("Initializing client B");
+    init_cb_cpa_msg();
     return 0;
 }
 
-int start_clnt_b() {
-    //start_cb_cpa_msg();
+int start_clnt_b(void) {
+    log_i("Starting client B");
+    start_cb_cpa_msg();
     set_client_handler(&clnt_b_handler);
+    return 0;
+}
+
+int stop_clnt_b(void) {
+    log_i("Stopping client B");
+    set_client_handler(NULL);
     return 0;
 }
