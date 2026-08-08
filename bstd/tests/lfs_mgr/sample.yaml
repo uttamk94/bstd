@@ -1,0 +1,21 @@
+sample:
+  description: LittleFS Manager Test
+  name: bstd_lfs_mgr_test
+common:
+  tags:
+    - lfs_mgr
+  integration_platforms:
+    - native_sim
+  harness: console
+  harness_config:
+    type: one_line
+    regex:
+      - "PASSED"
+      - "FAILED"
+tests:
+  bstd.lfs_mgr.basic:
+    tags:
+      - lfs_mgr
+      - main
+    platform_allow:
+      - native_sim

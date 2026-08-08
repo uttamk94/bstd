@@ -80,4 +80,4 @@ int stop_ft_task(void) {
     return 0;
 }
 
-K_THREAD_DEFINE(ft_task, 1024 * 12, ft_task_cb, NULL, NULL, NULL, 12, 0, 0);
+K_THREAD_DEFINE(ft_task, 1024 * 16, ft_task_cb, NULL, NULL, NULL, 12, 0, 0);

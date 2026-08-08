@@ -39,3 +39,10 @@ uttam@uttam:~/zephyrproject$ source ~/zephyr-env/bin/activate
 (zephyr-env) uttam@uttam:~/zephyrproject$ west flash
 (zephyr-env) uttam@uttam:~/zephyrproject$ west espressif monitor
 
+
+
+# Run all lfs_mgr tests
+west twister -p native_sim -T bstd/tests/lfs_mgr
+
+# Or use west directly
+cd bstd && west build -b native_sim -T tests/lfs_mgr

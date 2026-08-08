@@ -34,11 +34,15 @@
 #include "netwrk.h"
 #endif
 
+#ifdef CONFIG_LFS_MGR_ENABLE
+#include "lfs_mgr.h"
+#endif
+
 #ifdef CONFIG_SHELL_MOD
 #include "shell_main.h"
 #endif
 
-#define LOOKUP(mod) { .init_func = init_##mod, .start_func = start_##mod }
+#define LOOKUP(mod) { .init_func = init_##mod, .start_func = start_##mod, .stop_func = stop_##mod }
 #define ARY_SZ(ary) (sizeof(ary) / sizeof(ary[0]))
 
 typedef struct {
@@ -57,28 +61,31 @@ K_MSGQ_DEFINE(main_msgq, 10, sizeof(mmsg_t), 4);
 
 app_init_t look_up[] = {
 #ifdef CONFIG_NVS_MGR_ENABLE
-	{ .init_func = init_nvs_mgr, .start_func = start_nvs_mgr, .stop_func = stop_nvs_mgr },
+	LOOKUP(nvs_mgr),
+#endif
+#ifdef CONFIG_LFS_MGR_ENABLE
+	LOOKUP(lfs_mgr),
 #endif
 #ifdef CONFIG_SENSOR
-	{ .init_func = init_sensor, .start_func = start_sensor, .stop_func = stop_sensor },
+	LOOKUP(sensor),
 #endif
 #ifdef CONFIG_BLE_ENABLE
-	{ .init_func = init_ble, .start_func = start_ble, .stop_func = stop_ble },
+	LOOKUP(ble),
 #endif
 #ifdef CONFIG_COMMU_ENABLE
-	{ .init_func = init_commu, .start_func = start_commu, .stop_func = stop_commu },
+	LOOKUP(commu),
 #endif
 #ifdef CONFIG_DEV_SETT
-	{ .init_func = init_dev_sett, .start_func = start_dev_sett, .stop_func = stop_dev_sett },
+	LOOKUP(dev_sett),
 #endif
 #ifdef CONFIG_FEATURE_ENABLE
-	{ .init_func = init_feature, .start_func = start_feature, .stop_func = stop_feature },
+	LOOKUP(feature),
 #endif
 #ifdef CONFIG_NETWORK_MOD
-	{ .init_func = init_netwrk, .start_func = start_netwrk, .stop_func = stop_netwrk },
+	LOOKUP(netwrk),
 #endif
 #ifdef CONFIG_SHELL_MOD
-	{ .init_func = init_shell, .start_func = start_shell, .stop_func = stop_shell },
+	LOOKUP(shell),
 #endif
 };
 

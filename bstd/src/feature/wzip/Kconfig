@@ -1,0 +1,80 @@
+menu "feature menu"
+
+# WZIP Compression Module Kconfig
+# Adaptive lossless compression for wearable sensor data
+
+menuconfig WEARABLE_COMPRESSION
+    bool "Wearable Sensor Compression (wzip)"
+    default n
+    help
+      Enable adaptive lossless compression for wearable sensor data.
+      Uses learned pattern dictionaries for high compression ratios.
+
+if WEARABLE_COMPRESSION
+
+config COMPRESSION_CODEBOOK_SIZE
+    int "Codebook size (number of patterns)"
+    default 256
+    range 64 512
+    help
+      Number of pattern entries in the dictionary.
+      Larger = better compression but more memory.
+      256 entries = 512 bytes for 16-bit indices.
+
+config COMPRESSION_WINDOW_SIZE
+    int "Window size in samples"
+    default 64
+    range 16 256
+    help
+      Number of samples per compression window.
+      Larger = better pattern matching but more latency.
+      64 samples @ 25Hz = 2.56 seconds.
+
+config COMPRESSION_NUM_CHANNELS
+    int "Number of sensor channels"
+    default 8
+    range 1 16
+    help
+      Number of simultaneous sensor channels to compress.
+      8 channels = PPG(1) + Accel(3) + Temp(1) + Gyro(3).
+
+config COMPRESSION_GOLOMB_RICE_K
+    int "Default Golomb-Rice parameter k"
+    default 2
+    range 0 8
+    help
+      Default k parameter for Golomb-Rice entropy coding.
+      k=2 is optimal for typical sensor residuals.
+      Lower k = better for small residuals.
+
+config COMPRESSION_ENABLE_METADATA
+    bool "Enable metadata passthrough"
+    default y
+    help
+      Support TLV metadata in compressed stream.
+      Allows interleaving timestamps, annotations, etc.
+
+config COMPRESSION_ENABLE_STATS
+    bool "Enable usage statistics collection"
+    default y
+    help
+      Collect pattern usage statistics for cloud adaptation.
+      Required for online dictionary updates.
+
+config COMPRESSION_MAX_TLV_PAYLOAD
+    int "Maximum TLV payload size (bytes)"
+    default 1024
+    range 128 4096
+    help
+      Maximum size of a single TLV chunk payload.
+
+config COMPRESSION_NOVELTY_THRESHOLD
+    int "Novelty detection threshold"
+    default 1000
+    range 100 10000
+    help
+      L1 distance threshold for detecting novel patterns.
+      Windows exceeding this are stored as raw data.
+
+endif # WEARABLE_COMPRESSION
+endmenu

@@ -1,0 +1,31 @@
+menu "LFS Mgr Enable menu"
+
+config LFS_MGR_ENABLE
+	bool "Build source code for LittleFS Manager"
+	default n
+	help
+	  Build source code for LittleFS mount and management
+
+if LFS_MGR_ENABLE
+
+config LFS_MOUNT_POINT
+	string "LittleFS mount point path"
+	default "/lfs:"
+	help
+	  Path where LittleFS will be mounted
+
+config LFS_MGR_STORAGE_DEV
+	string "LittleFS storage device"
+	default ""
+	help
+	  Storage device name for LittleFS. Leave empty to use DT_CHOSEN_ZEPHYR_FS_FLASH
+
+config LFS_MGR_USE_PARTITION
+	bool "Use dedicated LittleFS partition"
+	default y
+	help
+	  Mount LittleFS from a dedicated partition named lfs_partition in devicetree
+
+endif
+
+endmenu

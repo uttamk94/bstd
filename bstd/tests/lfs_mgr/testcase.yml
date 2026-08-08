@@ -1,0 +1,6 @@
+tests:
+  bstd.lfs_mgr.basic:
+    platform_allow:
+      - native_sim
+    tags:
+      - lfs_mgr

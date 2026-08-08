@@ -2,6 +2,7 @@ menu "feature menu"
 rsource "ft_a/Kconfig"
 rsource "ft_b/Kconfig"
 rsource "lcr/Kconfig"
+rsource "wzip/Kconfig"
 
 config FEATURE_ENABLE
 	bool  "Build source code for feature"
