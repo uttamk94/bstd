@@ -1,13 +1,37 @@
-.. zephyr:code-sample:: hello_world
-   :name: Hello World
-
-   Print "Hello World" to the console.
+BSTD - Board System Test & Development Framework
 
 Overview
 ********
 
-A simple sample that can be used with any :ref:`supported board <boards>` and
-prints "Hello World" to the console.
+BSTD is a modular embedded firmware framework built on Zephyr RTOS, designed for
+ESP32-S3 and other supported boards. It provides a structured, event-driven
+architecture leveraging Zephyr's kernel primitives, memory management, and
+device tree for pluggable subsystems covering BLE communication, sensor
+management, network connectivity, data compression, and device configuration.
+
+Technical Architecture
+-----------------------
+
+- **Zephyr Kernel Primitives**: Uses ``k_msgq`` for thread-safe inter-module
+  messaging, ``K_FOREVER``/``K_NO_WAIT`` timeout semantics, and cooperative
+  scheduling with a single main thread dispatching events to subsystems.
+- **Modular Subsystem Design**: Nine independently configurable modules
+  (``CONFIG_*`` toggles in Kconfig) initialized via function pointer tables with
+  ``init()``, ``start()``, and ``stop()`` lifecycle callbacks; modules are
+  conditionally compiled based on ``prj.conf``.
+- **Zephyr Build System Integration**: Built with West/meta-tooling, CMake
+  multi-image support, and board-specific overlays (e.g., ESP32-S3 DevKitC
+  procpu overlay).
+- **Subsystems**:
+  - ``ble`` - BLE advertising, connection, and GATT services
+  - ``commu`` - Dual-client communication protocol (Client A/B)
+  - ``feature`` - Feature tasks, state handlers, pattern matching, and
+    ``wzip`` lossless compression (Golomb-Rice + pattern matching + TLV)
+  - ``netwrk`` - WiFi, HTTP, and network task management
+  - ``sensor`` / ``gpio_mgr`` - Hardware abstraction layers
+  - ``nvs_mgr`` / ``lfs_mgr`` - Non-volatile and LittleFS storage backends
+  - ``dev_sett`` - Device settings management
+  - ``shell`` - Interactive CLI via Zephyr shell
 
 Building and Running
 ********************
