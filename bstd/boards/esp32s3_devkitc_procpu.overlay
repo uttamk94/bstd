@@ -1,0 +1,44 @@
+/*
+ * BSTD board-specific overlay for ESP32-S3 DevKitC (PROCPU)
+ *
+ * This file is automatically applied by Zephyr because it lives in
+ * <app>/boards/ (plural) and is named <board>.overlay.
+ *
+ * It declares GPIO pins used by gpio_mgr for input reading and output blinking.
+ */
+/ {
+    /* gpio_mgr node: all sensor/actuator pins are declared here.
+     * Zephyr GPIO subsystem will expose each child as a gpio_dt_spec.
+     */
+    gpio_mgr: gpio-mgr {
+        compatible = "gpio-keys";
+
+        /* Input pins (sensors, buttons, PIR, etc.) */
+        sensor_in: input_3 {
+            gpios = <&gpio0 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+            label = "Sensor Input GPIO3";
+        };
+        input_4: input_4 {
+            gpios = <&gpio0 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+            label = "Input GPIO4";
+        };
+        input_5: input_5 {
+            gpios = <&gpio0 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+            label = "Input GPIO5";
+        };
+
+        /* Output pins (LEDs, relays, buzzers, etc.) */
+        led_2: output_2 {
+            gpios = <&gpio0 2 GPIO_ACTIVE_HIGH>;
+            label = "LED GPIO2";
+        };
+        led_6: output_6 {
+            gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;
+            label = "LED GPIO6";
+        };
+        led_7: output_7 {
+            gpios = <&gpio0 7 GPIO_ACTIVE_HIGH>;
+            label = "LED GPIO7";
+        };
+    };
+};

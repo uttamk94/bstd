@@ -19,10 +19,17 @@ typedef struct {
 
 typedef void (*sensor_data_cb)(sens_type_t type, unsigned int len, void *data);
 
+/* Core sensor API: registry + dispatcher */
 int reg_sensor(sens_type_t type, sensor_data_cb handler);
 int unreg_sensor(sens_type_t type, sensor_data_cb handler);
 int insert_sensor_data(sens_type_t type, unsigned int len, void *data);
 
-int init_sensor();
-int start_sensor();
-int stop_sensor();
+/* Sensor source lifecycle hooks (e.g. GPIO source in sensor_gpio.c) */
+int init_sensor_gpio(void);
+int start_sensor_gpio(void);
+int stop_sensor_gpio(void);
+
+/* Module lifecycle (called by main.c via LOOKUP(sensor)) */
+int init_sensor(void);
+int start_sensor(void);
+int stop_sensor(void);

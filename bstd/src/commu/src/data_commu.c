@@ -37,6 +37,10 @@ void on_data_received(void *buf, unsigned short len) {
     }
 
     mmsg_handler_t *handler = client_table[client];
+    if (!handler) {
+        log_e("No handler for client %d", client);
+        return;
+    }
     for (int i = 0; i < handler->count; i++) {
         msg_cb_t *cb = &handler->cbs[i];
         if (cb->id == msg_type) {

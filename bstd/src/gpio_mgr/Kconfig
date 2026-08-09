@@ -1,0 +1,7 @@
+config GPIO_MGR
+    bool "GPIO Manager Module"
+    default y
+    help
+      Portable GPIO manager module. Provides unified read/write/toggle/blink
+      and interrupt-driven input callbacks. Uses singleton + registry pattern
+      so the same API can be ported to other RTOSes with minimal changes.

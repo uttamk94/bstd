@@ -29,6 +29,9 @@
 #ifdef CONFIG_SENSOR
 #include "sensor.h"
 #endif
+#ifdef CONFIG_GPIO_MGR
+#include "gpio_mgr.h"
+#endif
 
 #ifdef CONFIG_NETWORK_MOD
 #include "netwrk.h"
@@ -68,6 +71,9 @@ app_init_t look_up[] = {
 #endif
 #ifdef CONFIG_SENSOR
 	LOOKUP(sensor),
+#endif
+#ifdef CONFIG_GPIO_MGR
+	LOOKUP(gpio_mgr),
 #endif
 #ifdef CONFIG_BLE_ENABLE
 	LOOKUP(ble),

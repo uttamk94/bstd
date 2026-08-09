@@ -1,11 +1,9 @@
 #include <zephyr/kernel.h>
 #include <stdio.h>
+#include <string.h>
 #include "sensor.h"
-#include <time.h>
-#include <stdlib.h>
 #include "loggers.h"
 
-#define SENSOR_TH_STK_SIZE 1024 * 8
 #define MAX_CLNT    0x10
 
 typedef struct {
@@ -26,7 +24,7 @@ int reg_sensor(sens_type_t type, sensor_data_cb handler) {
     }
     table[type].handler[table[type].index++] = handler;
     table[type].index = table[type].index % MAX_CLNT;
-    log_i(" sensor %d", type);
+    log_i("Registered sensor type %d", type);
     return 0;
 }
 
@@ -40,60 +38,35 @@ int unreg_sensor(sens_type_t type, sensor_data_cb handler) {
     return -1;
 }
 
+/* Core dispatcher: called by sensor sources (e.g. sensor_gpio.c)
+ * to publish data to all registered consumers.
+ */
 int insert_sensor_data(sens_type_t type, unsigned int len, void *data) {
     if (type >= SENS_MAX || !data || len == 0) {
         log_e("Invalid sensor data: type=%d, len=%d", type, len);
         return -EINVAL;
     }
-    log_d("type=%d, len=%d", type, len);
-    return 0;
-}
 
-void notify_sensor_data(sens_type_t type, sensor_out_t *out, unsigned int len) {
     for (int i = 0; i < MAX_CLNT; i++) {
         if (table[type].handler[i]) {
-            table[type].handler[i](type, len, (unsigned char *) out);
+            table[type].handler[i](type, len, data);
         }
     }
+    return 0;
 }
 
-void generate_data(sens_type_t type) {
-    sensor_out_t out = {0, };
-    out.type = type;
-    out.length = 5 + 25;
-    out.timestamp = time(NULL);
-    for (int i = 0; i < out.length && i < 32; i++) {
-        out.data[i] = i * 5;
-    }
-    log_i("t:%u l:%u", out.type, out.length);
-    notify_sensor_data(type, &out, sizeof(sensor_out_t));
-}
-
-void sensor_thread_cb(void *arg1, void *arg2, void *arg3) {
-    log_i("sensor_thread");
-    int count = 0;
-    while (1) {
-        log_i("%d", ++count);
-        count = count % 99999;
-        generate_data(1);
-        k_msleep(2000);
-    }
-}
-
-K_THREAD_DEFINE(sensor_thread, SENSOR_TH_STK_SIZE, sensor_thread_cb, NULL, NULL, NULL, 12, 0, 0);
-
-int init_sensor() {
+int init_sensor(void) {
     log_i("Init");
     memset(table, 0, sizeof(table));
-    return 0;
+    return init_sensor_gpio();
 }
 
-int start_sensor() {
+int start_sensor(void) {
     log_i("Start");
-    return 0;
+    return start_sensor_gpio();
 }
 
 int stop_sensor(void) {
     log_i("Stop");
-    return 0;
+    return stop_sensor_gpio();
 }
